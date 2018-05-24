@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="baseDAO" abstract="true" class="edu.hziee.common.dbroute.BaseDAO">
+		<property name="dbRouteConfig" ref="dbRouteConfig" />
+		<property name="defaultDB" ref="smsDefaultDB" />
+	</bean>
+
+	<bean id="menuDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.MenuDAOImpl">
+	</bean>
+
+	<bean id="accountMappingDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.AccountMappingDAOImpl">
+	</bean>
+
+	<bean id="parameterDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.ParameterDAOImpl">
+	</bean>
+ 
+	<bean id="userDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.UserDAOImpl">
+	</bean>
+
+	<bean id="roleDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.RoleDAOImpl">
+	</bean>
+
+	<bean id="ipDAO" parent="baseDAO"
+		class="edu.hziee.cap.common.dal.dao.impl.IpDAOImpl">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="commonDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="userActionLogDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.UserActionLogDAOImpl">
+	</bean>
+
+	<bean id="seqDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.SeqDAOImpl">
+	</bean>
+
+	<bean id="spInfoDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.SpInfoDAOImpl">
+	</bean>
+
+
+	<bean id="channelBizTypeInfoDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.ChannelBizTypeInfoDAOImpl">
+	</bean>
+	
+	<bean id="cpRateDao" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpRateDAOImpl">
+	</bean>
+	
+	<bean id="channelDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.ChannelDAOImpl">
+	</bean>
+
+	<bean id="blackListDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.BlackListDAOImpl">
+	</bean>
+	<bean id="cpInfoDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpInfoDAOImpl">
+	</bean>
+	<bean id="channelGroupDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.ChannelGroupDAOImpl">
+	</bean>
+	<bean id="cpChannelDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpChannelDAOImpl">
+	</bean>
+	<bean id="cpMrDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpMrDAOImpl">
+	</bean>
+
+	<bean id="cpSettleDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpSettleDAOImpl">
+	</bean>
+
+	<bean id="bizDatecpSettleDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpSettleDAOImpl">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="spMrDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.SpMrDAOImpl">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="channelProvinceLimitDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.ChannelProvinceLimitDAOImpl">
+	</bean>
+	<bean id="spMrSettleDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.SpMrSettleDAOImpl">
+	</bean>
+
+	<bean id="provinceDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.ProvinceDAOImpl">
+	</bean>
+
+	<bean id="userComplaintDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.UserComplaintDAOImpl">
+	</bean>
+
+	<bean id="phoneInfoDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.PhoneInfoDAOImpl">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="commonDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="commonBlackListDAO" parent="baseDAO"
+		class="com.joyreach.sp.common.dao.impl.BlackListDAOImpl">
+	</bean>
+	<bean id="commonCpInfoDAO" parent="baseDAO"
+		class="com.joyreach.sp.common.dao.impl.CpInfoDAOImpl">
+	</bean>
+
+	<bean id="smsApiResultDAO" class="com.joyreach.sp.common.dao.impl.SmsApiResultDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="ayxComplaintDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.AyxComplaintDAOImpl">
+	</bean>
+
+	<bean id="complaintRateDataDAO" parent="baseDAO"
+		class="com.joyreach.sp.platform.dao.impl.ComplaintRateDataDAOImpl">
+	</bean>
+
+	<bean id="ayxComplaintLoggerDAO"
+		class="com.joyreach.sp.platform.dao.impl.AyxComplaintLoggerDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="imsiStatisticsDAO" class="com.joyreach.sp.platform.dao.impl.ImsiStatisticsDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="areaDAO" class="com.joyreach.sp.common.dao.impl.AreaDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="commonDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cpMrMonitorDAO" class="com.joyreach.sp.platform.dao.impl.CpMrMonitorDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="mrMonitorDAO" class="com.joyreach.sp.platform.dao.impl.MrMonitorDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="cpAppMonitorDAO" class="com.joyreach.sp.platform.dao.impl.CpAppMonitorDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+
+	<bean id="appBlackDAO" class="com.joyreach.sp.common.dao.impl.AppBlackDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="smsCpAppDAO" class="com.joyreach.sp.platform.dao.impl.SmsCpAppDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="ehcacheServerDAO" class="com.joyreach.sp.platform.dao.impl.EhcacheServerDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="spMrAppDAO" class="com.joyreach.sp.platform.dao.impl.SpMrAppDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="providerMrDAO" class="com.joyreach.sp.platform.dao.impl.ProviderMrDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="cpAppOpenDAO" class="com.joyreach.sp.platform.dao.impl.CpAppOpenDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="customerRelationDAO"
+		class="com.joyreach.sp.platform.dao.impl.CustomerRelationDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="channelConfirmDAO" class="com.joyreach.sp.platform.dao.impl.ChannelConfirmDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="sensitiveProvinceDAO"
+		class="com.joyreach.sp.platform.dao.impl.SensitiveProvinceDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="cpProvinceUserDAO" class="com.joyreach.sp.platform.dao.impl.CpProvinceUserDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cpSettlePayDAO" class="com.joyreach.sp.platform.dao.impl.CpSettlePayDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="channelMonitorDAO" class="com.joyreach.sp.platform.dao.impl.ChannelMonitorDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="spAmountRateDAO" class="com.joyreach.sp.platform.dao.impl.SpAmountRateDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cpRealTimeReqExchangeDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpRealTimeReqExchangeDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cpRealTimeMrExchangeDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpRealTimeMrExchangeDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cpChGroupInfoDAO" class="com.joyreach.sp.platform.dao.impl.CpChGroupInfoDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="shunShiComplaintDAO"
+		class="com.joyreach.sp.platform.dao.impl.ShunShiComplaintDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="ydmfAreaStrategyDAO"
+		class="com.joyreach.sp.platform.dao.impl.YdmfAreaStrategyDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="yddmSmsNotifyDAO" class="com.joyreach.sp.platform.dao.impl.YddmSmsNotifyDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="cpChGroupLimitDAO" class="com.joyreach.sp.platform.dao.impl.CpChGroupLimitDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="cpChGroupStrategyDAO" class="com.joyreach.sp.platform.dao.impl.CpChGroupStrategyDAOImpl"
+		parent="baseDAO">
+	</bean>
+	
+	<bean id="wanRatioDAO" class="com.joyreach.sp.platform.dao.impl.WanRatioDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="spCpMonitorDAO" class="com.joyreach.sp.platform.dao.impl.SpCpMonitorDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="suGeMrDAO" class="com.joyreach.sp.platform.dao.impl.SuGeMrDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="sameTypeChGroupLimitDAO"
+		class="com.joyreach.sp.platform.dao.impl.SameTypeChGroupLimitDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="cpSettleInvoiceDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpSettleInvoiceDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="smsSpConfirmDAO" class="com.joyreach.sp.platform.dao.impl.SmsSpConfirmDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="smsRequestErrorDAO"
+		class="com.joyreach.sp.platform.dao.impl.SmsRequestErrorDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="spCpMonitorCollectDAO"
+		class="com.joyreach.sp.platform.dao.impl.SpCpMonitorCollectDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="cpChChGroupWeightDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpChChGroupWeightDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="imsiPhoneDAO" class="com.joyreach.sp.platform.dao.impl.ImsiPhoneDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="commonDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cpChannelGroupDAO" class="com.joyreach.sp.common.dao.impl.CpChannelGroupDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="cpMrMonthCodeSettleDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpMrMonthCodeSettleDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="bizDateCpMrMonthCodeSettleDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpMrMonthCodeSettleDAOImpl"
+		parent="baseDAO">
+		<property name="defaultDB">
+			<bean class="edu.hziee.common.dbroute.config.DBRoute">
+				<constructor-arg value="bizDateDB" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="monthOrderDAO" class="com.joyreach.sp.common.dao.impl.MonthOrderDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="cpBizTypeSettlePeriodDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpBizTypeSettlePeriodDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="monthSpMrSettleDAO"
+		class="com.joyreach.sp.platform.dao.impl.MonthSpMrSettleDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="monthCpMrSettleDAO"
+		class="com.joyreach.sp.platform.dao.impl.MonthCpMrSettleDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="remainUserRateDAO" class="com.joyreach.sp.platform.dao.impl.RemainUserRateDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="monthRealTimeExchangeDAO"
+		class="com.joyreach.sp.platform.dao.impl.MonthRealTimeExchangeDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="checkPassLimitDAO" class="com.joyreach.sp.platform.dao.impl.CheckPassLimitDAOImpl"
+		parent="baseDAO">
+	</bean>
+
+	<bean id="nextDaySettleDAO" class="com.joyreach.sp.platform.dao.impl.NextDaySettleDAOImpl"
+		parent="baseDAO">
+	</bean>
+	
+	<bean id="monthOrderPreserveDao" class="com.joyreach.sp.platform.dao.impl.MonthOrderPreserveDaoImpl"
+		parent="baseDAO">
+	</bean>
+	
+	<bean id="monthRealTimeTransformDAO"
+		class="com.joyreach.sp.platform.dao.impl.MonthRealTimeTransformDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="smsMrResultMonthCheckDAO"
+		class="com.joyreach.sp.platform.dao.impl.SmsMrResultMonthCheckDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="whiteListDAO"
+		class="com.joyreach.sp.platform.dao.impl.WhiteListDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="cpMatchingMonitorDAO"
+		class="com.joyreach.sp.platform.dao.impl.CpMatchingMonitorDAOImpl"
+		parent="baseDAO">
+	</bean>
+	<bean id="cpMrSettleTaskDAO" 
+		class="com.joyreach.sp.platform.dao.impl.CpMrSettleTaskDAOImpl"
+		parent="baseDAO">
+	</bean>
+	
+	<bean id="tongYuRDOComplaintDAO" parent="baseDAO" class="com.joyreach.sp.platform.dao.impl.TongYuRDOComplaintDAOImpl">
+	</bean>
+
+<!-- 	<bean id="testDataDAO" class="com.joyreach.sp.platform.util.test.TestDataDAOImpl" -->
+<!-- 		parent="baseDAO"> -->
+<!-- 		<property name="defaultDB"> -->
+<!-- 			<bean class="edu.hziee.common.dbroute.config.DBRoute"> -->
+<!-- 				<constructor-arg value="bizDateDB" /> -->
+<!-- 			</bean> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	<bean id="dialingTestInfoDAO"
+		class="com.joyreach.sp.platform.dao.impl.DialingTestInfoDAOImpl"
+		parent="baseDAO">
+	</bean>
+</beans>

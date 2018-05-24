@@ -1,0 +1,99 @@
+2017-12-06 17:12:14,729 ERROR [main] (JettyLauncher.java:130) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:84)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:125)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 17:14:56,549 ERROR [main] (JettyLauncher.java:130) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:84)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:125)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 17:19:04,588 ERROR [main] (JettyLauncher.java:130) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:84)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:125)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 17:19:27,847 ERROR [main] (JettyLauncher.java:130) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:84)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:125)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 17:25:24,605  INFO [main] (JettyLauncher.java:84) - class cn.gloomy.h.api.JettyLauncher
+2017-12-06 17:25:24,607  INFO [main] (JettyLauncher.java:85) - null
+2017-12-06 17:25:24,608 ERROR [main] (JettyLauncher.java:133) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:86)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:128)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 17:34:40,582  INFO [main] (JettyLauncher.java:84) - class cn.gloomy.h.api.JettyLauncher
+2017-12-06 17:34:40,584  INFO [main] (JettyLauncher.java:85) - null
+2017-12-06 17:34:40,586 ERROR [main] (JettyLauncher.java:133) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:86)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:128)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 17:36:28,969  INFO [main] (JettyLauncher.java:84) - class cn.gloomy.h.api.JettyLauncher
+2017-12-06 17:36:28,971  INFO [main] (JettyLauncher.java:86) - null
+2017-12-06 17:36:28,972  INFO [main] (JettyLauncher.java:87) - file:/E:/workspace/test/h-wechat/target/h-wechat-0.0.1-SNAPSHOT-jar-with-dependencies.jar!/cn/gloomy/h/api/
+2017-12-06 17:36:28,973 ERROR [main] (JettyLauncher.java:135) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:88)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:130)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 18:39:27,416 ERROR [main] (JettyLauncher.java:134) - Server Start Error: 
+java.lang.NullPointerException
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:88)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:129)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 19:01:00,707  INFO [main] (JettyLauncher.java:87) - exists file is :false
+2017-12-06 19:01:00,710  INFO [main] (JettyLauncher.java:89) - file:/E:/workspace/test/h-wechat/target/h-wechat-0.0.1-SNAPSHOT-jar-with-dependencies.jar!/cwebdefault.xml
+2017-12-06 19:01:00,713  INFO [main] (Server.java:272) - jetty-8.y.z-SNAPSHOT
+2017-12-06 19:01:01,039  WARN [main] (WebAppContext.java:503) - Failed startup of context o.e.j.w.WebAppContext{/,file:/E:/workspace/test/h-wechat/target/webapp}
+java.io.FileNotFoundException: E:\workspace\test\h-wechat\target\h-wechat-0.0.1-SNAPSHOT-jar-with-dependencies.jar!\cwebdefault.xml (系统找不到指定的路径。)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at org.eclipse.jetty.util.resource.FileResource.getInputStream(FileResource.java:286)
+	at org.eclipse.jetty.webapp.Descriptor.parse(Descriptor.java:65)
+	at org.eclipse.jetty.webapp.WebDescriptor.parse(WebDescriptor.java:148)
+	at org.eclipse.jetty.webapp.MetaData.setDefaults(MetaData.java:149)
+	at org.eclipse.jetty.webapp.WebXmlConfiguration.preConfigure(WebXmlConfiguration.java:54)
+	at org.eclipse.jetty.webapp.WebAppContext.preConfigure(WebAppContext.java:457)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:493)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.server.handler.HandlerCollection.doStart(HandlerCollection.java:229)
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.doStart(ContextHandlerCollection.java:172)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.doStart(HandlerWrapper.java:95)
+	at org.eclipse.jetty.server.Server.doStart(Server.java:282)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:95)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:131)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 19:01:01,309  INFO [main] (AbstractConnector.java:338) - Started SelectChannelConnector@0.0.0.0:80
+2017-12-06 19:01:01,310  WARN [main] (JettyLauncher.java:133) - Server start in [0.0.0.0:80]
+2017-12-06 19:07:05,193  INFO [main] (JettyLauncher.java:87) - exists file is :false
+2017-12-06 19:07:05,195  INFO [main] (JettyLauncher.java:89) - file:/E:/workspace/test/h-wechat/target/h-wechat-0.0.1-SNAPSHOT-jar-with-dependencies.jar!/webdefault.xml
+2017-12-06 19:07:05,198  INFO [main] (Server.java:272) - jetty-8.y.z-SNAPSHOT
+2017-12-06 19:07:05,237  WARN [main] (WebAppContext.java:503) - Failed startup of context o.e.j.w.WebAppContext{/,file:/E:/workspace/test/h-wechat/target/webapp}
+java.io.FileNotFoundException: E:\workspace\test\h-wechat\target\h-wechat-0.0.1-SNAPSHOT-jar-with-dependencies.jar!\webdefault.xml (系统找不到指定的路径。)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at org.eclipse.jetty.util.resource.FileResource.getInputStream(FileResource.java:286)
+	at org.eclipse.jetty.webapp.Descriptor.parse(Descriptor.java:65)
+	at org.eclipse.jetty.webapp.WebDescriptor.parse(WebDescriptor.java:148)
+	at org.eclipse.jetty.webapp.MetaData.setDefaults(MetaData.java:149)
+	at org.eclipse.jetty.webapp.WebXmlConfiguration.preConfigure(WebXmlConfiguration.java:54)
+	at org.eclipse.jetty.webapp.WebAppContext.preConfigure(WebAppContext.java:457)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:493)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.server.handler.HandlerCollection.doStart(HandlerCollection.java:229)
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.doStart(ContextHandlerCollection.java:172)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.doStart(HandlerWrapper.java:95)
+	at org.eclipse.jetty.server.Server.doStart(Server.java:282)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at cn.gloomy.h.api.JettyLauncher.start(JettyLauncher.java:95)
+	at cn.gloomy.h.api.JettyLauncher.main(JettyLauncher.java:131)
+	at cn.gloomy.h.api.Booter.main(Booter.java:5)
+2017-12-06 19:07:05,272  INFO [main] (AbstractConnector.java:338) - Started SelectChannelConnector@0.0.0.0:80
+2017-12-06 19:07:05,273  WARN [main] (JettyLauncher.java:133) - Server start in [0.0.0.0:80]

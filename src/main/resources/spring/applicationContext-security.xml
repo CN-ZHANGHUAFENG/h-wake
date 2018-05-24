@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd"
+	default-lazy-init="true">
+
+	<!-- <bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener" 
+		/> -->
+
+	<!-- 设定访问权限 -->
+	<sec:http auto-config="false" access-denied-page="/jsp/common/403.jsp">
+		<sec:intercept-url pattern="/images/**" filters="none" />
+		<sec:intercept-url pattern="/css/**" filters="none" />
+		<sec:intercept-url pattern="/js/**" filters="none" />
+		<sec:intercept-url pattern="/jsp/**" filters="none" />
+		<sec:intercept-url pattern="/jsp/common/**" filters="none" />
+		<sec:intercept-url pattern="/jsp/main/**" filters="none" />
+
+		<sec:intercept-url pattern="/announcementShowAction_outSideList.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/announcementShowAction_outSideList_table.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/announcementShowAction_detail.do*"
+			filters="none" />
+
+		<sec:intercept-url pattern="/proxySub/active.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/proxySub/activeProxySub.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/proxySub/activeProxySubSucc.do*"
+			filters="none" />
+		<sec:intercept-url pattern="standEmailShow_list.do*"
+			filters="none" />
+		<sec:intercept-url pattern="standEmailShow_detail.do*"
+			filters="none" />
+
+		<sec:intercept-url pattern="/index.do*" filters="none" />
+		<sec:intercept-url pattern="/timeOut.do*" filters="none" />
+		<sec:intercept-url pattern="/register.do*" filters="none" />
+		<sec:intercept-url pattern="/register/index.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/register/emailActive.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/register/active.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/register/checkWaitPage.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/register/sendEmailAgain.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/password/index.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/password/sendEmailPwd.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/password/sumitEmailPage.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/password/modifyPwdPage.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/password/modifyPwd.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/password/success.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/suGeMr_getData.do*"
+			filters="none" />
+		<sec:intercept-url pattern="/mainten.do*" filters="none" />
+		<sec:intercept-url pattern="/static/**" filters="none" />
+		<sec:form-login login-page="/index.do"
+			always-use-default-target="true" authentication-failure-url="/index.do"
+			default-target-url="/login.do" />
+		<sec:logout logout-url="/logout.do" logout-success-url="/index.do"
+			invalidate-session="true" />
+		<sec:concurrent-session-control
+			max-sessions="1" exception-if-maximum-exceeded="false" />
+	</sec:http>
+
+	<bean id="filterSecurityInterceptor"
+		class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="objectDefinitionSource"
+			ref="secureResourceFilterInvocationDefinitionSource">
+		</property>
+		<property name="observeOncePerRequest" value="false" />
+		<sec:custom-filter after="LAST" />
+	</bean>
+
+	<bean id="secureResourceFilterInvocationDefinitionSource"
+		class="com.joyreach.sp.platform.security.SecureResourceFilterInvocationDefinitionSource">
+		<property name="resourceLoadDefinition" ref="resourceLoadDefinition" />
+	</bean>
+
+	<bean id="databaseFilterInvocationDefinitionSource"
+		class="com.joyreach.sp.platform.security.DatabaseFilterInvocationDefinitionSource">
+		<property name="roleService" ref="roleService" />
+	</bean>
+
+	<bean id="resourceLoadDefinition"
+		class="com.joyreach.sp.platform.security.ResourceLoadDefinition">
+		<property name="configMemCache" ref="configMemCache" />
+		<property name="authority" ref="databaseFilterInvocationDefinitionSource" />
+	</bean>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+		<property name="allowIfAllAbstainDecisions" value="false" />
+		<property name="decisionVoters">
+			<list>
+				<bean class="org.springframework.security.vote.RoleVoter" />
+			</list>
+		</property>
+	</bean>
+
+	<sec:authentication-manager alias="authenticationManager" />
+
+	<sec:authentication-provider
+		user-service-ref="userDetailsService">
+		<sec:password-encoder hash="md5"></sec:password-encoder>
+	</sec:authentication-provider>
+
+	<!-- 用户权限的认证 -->
+	<bean id="userDetailsService"
+		class="com.joyreach.sp.platform.security.UserDetailsServiceImpl">
+		<property name="userService" ref="userService" />
+	</bean>
+</beans>

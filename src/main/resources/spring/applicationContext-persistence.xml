@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC
+          "-//SPRING//DTD BEAN//EN"
+          "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="smsDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		abstract="false" singleton="true" lazy-init="default" autowire="default"
+		dependency-check="default" destroy-method="close">
+		<property name="driverClass" value="${sp.jdbc.driver}" />
+		<property name="jdbcUrl" value="${sp.jdbc.url}" />
+		<property name="user" value="${sp.jdbc.username}" />
+		<property name="password" value="${sp.jdbc.password}" />
+		<property name="minPoolSize" value="${sp.jdbc.minPoolSize}" />
+		<property name="maxPoolSize" value="${sp.jdbc.maxPoolSize}" />
+		<property name="maxIdleTime" value="${sp.jdbc.maxIdleTime}" />
+		<property name="initialPoolSize" value="${sp.jdbc.initialPoolSize}" />
+		<property name="numHelperThreads" value="${sp.jdbc.numHelperThreads}" />
+		<property name="idleConnectionTestPeriod" value="${sp.jdbc.idleConnectionTestPeriod}" />
+		<property name="preferredTestQuery" value="${sp.jdbc.preferredTestQuery}" />
+	</bean>
+
+	<bean id="dataSourceCommon" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		abstract="false" singleton="true" lazy-init="default" autowire="default"
+		dependency-check="default" destroy-method="close">
+		<property name="driverClass" value="${common.jdbc.driver}" />
+		<property name="jdbcUrl" value="${common.jdbc.url}" />
+		<property name="user" value="${common.jdbc.username}" />
+		<property name="password" value="${common.jdbc.password}" />
+		<property name="minPoolSize" value="${common.jdbc.minPoolSize}" />
+		<property name="maxPoolSize" value="${common.jdbc.maxPoolSize}" />
+		<property name="maxIdleTime" value="${common.jdbc.maxIdleTime}" />
+		<property name="initialPoolSize" value="${common.jdbc.initialPoolSize}" />
+		<property name="numHelperThreads" value="${common.jdbc.numHelperThreads}" />
+		<property name="idleConnectionTestPeriod" value="${common.jdbc.idleConnectionTestPeriod}" />
+		<property name="preferredTestQuery" value="${common.jdbc.preferredTestQuery}" />
+	</bean>
+
+	<bean id="bizDateDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		abstract="false" singleton="true" lazy-init="default" autowire="default"
+		dependency-check="default" destroy-method="close">
+		<property name="driverClass" value="${biz.date.jdbc.driver}" />
+		<property name="jdbcUrl" value="${biz.date.jdbc.url}" />
+		<property name="user" value="${biz.date.jdbc.username}" />
+		<property name="password" value="${biz.date.jdbc.password}" />
+		<property name="minPoolSize" value="${biz.date.jdbc.minPoolSize}" />
+		<property name="maxPoolSize" value="${biz.date.jdbc.maxPoolSize}" />
+		<property name="maxIdleTime" value="${biz.date.jdbc.maxIdleTime}" />
+		<property name="initialPoolSize" value="${biz.date.jdbc.initialPoolSize}" />
+		<property name="numHelperThreads" value="${biz.date.jdbc.numHelperThreads}" />
+	</bean>
+
+	<bean id="smsSqlMap" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocations">
+			<list>
+				<value>
+					classpath:ibatis/sqlmap-config.xml
+				</value>
+			</list>
+		</property>
+		<property name="dataSource">
+			<ref bean="smsDataSource" />
+		</property>
+	</bean>
+
+	<bean id="bizDateSqlMapDB" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocations">
+			<list>
+				<value>classpath:ibatis/sqlmap-config.xml</value>
+			</list>
+		</property>
+		<property name="dataSource">
+			<ref local="bizDateDataSource" />
+		</property>
+	</bean>
+
+	<bean id="commonSqlMap" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocations">
+			<list>
+				<value>
+					classpath:ibatis/sqlmap-config.xml
+				</value>
+			</list>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSourceCommon" />
+		</property>
+	</bean>
+
+	<!-- 数据库路由规则配置 -->
+	<bean id="dbRouteConfig" class="edu.hziee.common.dbroute.config.DBRouteConfig">
+		<property name="sqlMapList">
+			<map>
+				<entry key="smsDB">
+					<ref local="smsSqlMap" />
+				</entry>
+				<entry key="commonDB">
+					<ref local="commonSqlMap" />
+				</entry>
+				<entry key="bizDateDB">
+					<ref local="bizDateSqlMapDB" />
+				</entry>
+			</map>
+		</property>
+		<property name="defaultNodeNameList">
+			<list>
+				<value>smsDB</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="smsDefaultDB" class="edu.hziee.common.dbroute.config.DBRoute">
+		<constructor-arg value="smsDB" />
+	</bean>
+</beans>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="mrMonitorRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="mrMonitorJedisConnectionFactory" />
+		<property name="keySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashValueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+	</bean>
+
+	<bean id="mrMonitorJedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		destroy-method="destroy">
+		<property name="hostName" value="${mr.monitor.redis.host}" />
+		<property name="port" value="${mr.monitor.redis.port}" />
+		<property name="database" value="${mr.monitor.redis.dbIndex}" />
+		<property name="password" value="${mr.monitor.redis.password}" />
+		<property name="timeout" value="${mr.monitor.redis.timeout}" />
+		<property name="usePool" value="${mr.monitor.redis.usePool}" />
+		<property name="poolConfig" ref="smsJedisPoolConfig" />
+	</bean>
+
+	<bean id="smsJedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxActive" value="${sp.redis.pool.maxActive}" />
+		<property name="maxIdle" value="${sp.redis.pool.maxIdle}" />
+		<property name="maxWait" value="${sp.redis.pool.maxWait}" />
+		<property name="testOnBorrow" value="${sp.redis.pool.testOnBorrow}" />
+	</bean>
+	
+	
+	<bean id="smsInrRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="smsInrJedisConnectionFactory" />
+		<property name="keySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="hashValueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+	</bean>
+	<bean id="smsInrJedisConnectionFactory"
+			class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+			destroy-method="destroy">
+			<property name="hostName" value="${sp.inr.redis.host}" />
+			<property name="port" value="${sp.inr.redis.port}" />
+			<property name="database" value="${sp.inr.redis.dbIndex}" />
+			<property name="password" value="${sp.inr.redis.password}" />
+			<property name="timeout" value="${sp.inr.redis.timeout}" />
+			<property name="usePool" value="${sp.inr.redis.usePool}" />
+			<property name="poolConfig" ref="smsInrJedisPoolConfig" />
+		</bean>
+		
+		<bean id="smsInrJedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxActive" value="${sp.redis.pool.maxActive}" />
+		<property name="maxIdle" value="${sp.redis.pool.maxIdle}" />
+		<property name="maxWait" value="${sp.redis.pool.maxWait}" />
+		<property name="testOnBorrow" value="${sp.redis.pool.testOnBorrow}" />
+	</bean>
+</beans>

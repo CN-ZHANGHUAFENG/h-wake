@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="configMemCache" class="edu.hziee.cap.common.MemCached"
+		destroy-method="destroy" init-method="init">
+		<property name="timeToLive">
+			<value>${config.remote.cache.timeToLive}</value>
+		</property>
+		<property name="servers">
+			<value>${config.remote.cache.server}</value>
+		</property>
+		<property name="weights">
+			<value>${config.remote.cache.weight}</value>
+		</property>
+		<property name="cacheRegion" value="configMemCache" />
+	</bean>
+
+	<bean id="smsApiResultMemcache" class="edu.hziee.cap.common.MemCached"
+		destroy-method="destroy" init-method="init">
+		<property name="timeToLive">
+			<value>${sms.api.result.remote.cache.timeToLive}</value>
+		</property>
+		<property name="servers">
+			<value>${sms.api.result.remote.cache.server}</value>
+		</property>
+		<property name="weights">
+			<value>${sms.api.result.remote.cache.weight}</value>
+		</property>
+		<property name="cacheRegion" value="smsApiResultMemCache" />
+	</bean>
+
+</beans>

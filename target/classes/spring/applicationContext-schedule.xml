@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="mrCheckTask" class="com.joyreach.sp.platform.task.MrCheckTask">
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="smsApiResultService" ref="smsApiResultService" />
+		<property name="areaService" ref="areaService" />
+		<property name="memCached" ref="configMemCache" />
+		<property name="mrCheckMonitorService" ref="mrCheckMonitorService" />
+		<property name="mrCheckEmail">
+			<bean class="com.joyreach.sp.platform.util.EmailUtil">
+				<property name="from" value="${login.mail.default.from}" />
+				<property name="host" value="${login.mail.host}" />
+				<property name="passWord" value="${login.mail.password}" />
+				<property name="port" value="${login.mail.port}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cpMrSettleTask" class="com.joyreach.sp.platform.task.CpMrSettleTask">
+		<property name="cpSettleService" ref="cpSettleService" />
+		<property name="cpMrMonthCodeSettleService" ref="cpMrMonthCodeSettleService" />
+		<property name="cpMrSettleTaskService" ref="cpMrSettleTaskService"></property>
+	</bean>
+
+	<bean id="imsiPhoneMappingCollectTask"
+		class="com.joyreach.sp.platform.task.ImsiPhoneMappingCollectTask">
+		<property name="imsiPhoneDAO" ref="imsiPhoneDAO" />
+		<property name="spMrDAO" ref="spMrDAO" />
+		<property name="ehcacheServerService" ref="ehcacheServerService" />
+	</bean>
+
+	<bean id="spCpMonitorTask" class="com.joyreach.sp.platform.task.SpCpMonitorTask">
+		<property name="spCpMonitorService" ref="spCpMonitorService" />
+	</bean>
+	<bean id="cpSettlePayTask" class="com.joyreach.sp.platform.task.CpSettlePayTask">
+		<property name="cpSettlePayService" ref="cpSettlePayService" />
+	</bean>
+
+	<bean id="complaintRateDataTask" class="com.joyreach.sp.platform.task.ComplaintRateDataTask">
+		<property name="complaintRateDataService" ref="complaintRateDataService" />
+	</bean>
+
+	<bean id="imsiStatisticsTask" class="com.joyreach.sp.platform.task.ImsiStatisticsTask">
+		<property name="imsiStatisticsDAO" ref="imsiStatisticsDAO" />
+	</bean>
+
+	<bean id="mrMonitorCollectionTask" class="com.joyreach.sp.platform.task.MrMonitorCollectionTask">
+		<property name="mrMonitorDAO" ref="mrMonitorDAO" />
+		<property name="mrMonitorRedisCache" ref="mrMonitorRedisTemplate" />
+	</bean>
+	<bean id="getYdmfMonitorTask" class="com.joyreach.sp.platform.task.GetYdmfMonitorTask">
+		<property name="getYdmfMonitorService" ref="getYdmfMonitorService" />
+	</bean>
+	<bean id="passLimitMonitorTask" class="com.joyreach.sp.platform.task.PassLimitMonitorTask">
+		<property name="checkPassLimitService" ref="checkPassLimitService" />
+	</bean>
+	
+	
+	<bean id="monthOrderPreserveTask" class="com.joyreach.sp.platform.task.MonthOrderPreserveTask">
+		<property name="monthOrderPreserveService" ref="monthOrderPreserveService" />
+	</bean>
+	
+	<bean id="monthOrderPreserveDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="monthOrderPreserveTask" />
+		<property name="targetMethod" value="excute" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="mrCheckDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="mrCheckTask" />
+		<property name="targetMethod" value="excute" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="cpMrSettleDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cpMrSettleTask" />
+		<property name="targetMethod" value="settel" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="imsiPhoneMappingCollectTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="imsiPhoneMappingCollectTask" />
+		<property name="targetMethod" value="collect" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="spCpMonitorDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="spCpMonitorTask" />
+		<property name="targetMethod" value="collectionSpCpMrData" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="collectionMrMatchDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="spCpMonitorTask" />
+		<property name="targetMethod" value="collectionMrMatchData" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="cpSettlePayDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cpSettlePayTask" />
+		<property name="targetMethod" value="settel" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="complaintRateDataDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="complaintRateDataTask" />
+		<property name="targetMethod" value="calculateComplaintRateData" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="complaintRateDataTotalDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="complaintRateDataTask" />
+		<property name="targetMethod" value="calculateTotalComplaintRateData" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="cpMrSyncDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cpMrSettleTask" />
+		<property name="targetMethod" value="sync" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="imsiStatisticsDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="imsiStatisticsTask" />
+		<property name="targetMethod" value="statistics" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="mrVolumeMonitorDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="mrMonitorCollectionTask" />
+		<property name="targetMethod" value="mrVolumeMonitor" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="getYdmfMonitorDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="getYdmfMonitorTask" />
+		<property name="targetMethod" value="getYdmfMonitor" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="passLimitMonitorDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="passLimitMonitorTask" />
+		<property name="targetMethod" value="passLimitMonitor" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="mrLimitMonitorDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="mrMonitorCollectionTask" />
+		<property name="targetMethod" value="limit" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="monthOrderPreserveTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="monthOrderPreserveDetail" />
+		<property name="cronExpression" value="${month.order.preserve.task.cron}" />
+	</bean>
+	<bean id="mrCheckTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="mrCheckDetail" />
+		<property name="cronExpression" value="${mr.check.cron}" />
+	</bean>
+	<bean id="cpMrSettleTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cpMrSettleDetail" />
+		<property name="cronExpression" value="${cp.mr.settle.cron}" />
+	</bean>
+	<bean id="imsiPhoneMappingCollectTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="imsiPhoneMappingCollectTaskDetail" />
+		<property name="cronExpression" value="${imsi.phone.mapping.collect.task.cron}" />
+	</bean>
+	<bean id="spCpMonitorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="spCpMonitorDetail" />
+		<property name="cronExpression" value="${sp.cp.mr.monitor.cron}" />
+	</bean>
+	<bean id="collectionMrMatchTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="collectionMrMatchDetail" />
+		<property name="cronExpression" value="${sp.cp.mr.monitor.cron}" />
+	</bean>
+	<bean id="cpSettlePayTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cpSettlePayDetail" />
+		<property name="cronExpression" value="${cp.settle.pay.cron}" />
+	</bean>
+	<bean id="complaintRateDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="complaintRateDataDetail" />
+		<property name="cronExpression" value="${complaint.rate.data.cron}" />
+	</bean>
+	<bean id="complaintRateDataTotalTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="complaintRateDataTotalDetail" />
+		<property name="cronExpression" value="${complaint.rate.data.total.cron}" />
+	</bean>
+
+	<bean id="cpMrSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cpMrSyncDetail" />
+		<property name="cronExpression" value="${cp.income.sync.cron}" />
+	</bean>
+
+	<bean id="imsiStatisticsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="imsiStatisticsDetail" />
+		<property name="cronExpression" value="${imsi.statistics.cron}" />
+	</bean>
+
+	<bean id="mrVolumeMonitorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="mrVolumeMonitorDetail" />
+		<property name="cronExpression" value="${mr.volume.monitor.collection.cron}" />
+	</bean>
+	<bean id="getYdmfMonitorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="getYdmfMonitorDetail" />
+		<property name="cronExpression" value="${ydmf.monitor.trigger.cron}" />
+	</bean>
+	<bean id="passLimitMonitorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="passLimitMonitorDetail" />
+		<property name="cronExpression" value="${pass.limit.monitor.trigger.cron}" />
+	</bean>
+
+	<bean id="mrLimitMonitorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="mrLimitMonitorDetail" />
+		<property name="cronExpression" value="${mr.limit.monitor.collection.cron}" />
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				
+			</list>
+		</property>
+	</bean>
+</beans>

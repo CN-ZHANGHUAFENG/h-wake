@@ -1,0 +1,869 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="menuService" class="com.joyreach.sp.platform.service.impl.MenuServiceImpl">
+		<property name="menuDAO" ref="menuDAO" />
+	</bean>
+
+	<bean id="userService" class="com.joyreach.sp.platform.service.impl.UserServiceImpl">
+		<property name="userDAO" ref="userDAO" />
+		<property name="accountMappingDAO" ref="accountMappingDAO" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="userActionLogService" ref="userActionLogService" />
+		<property name="ipService" ref="ipService" />
+		<property name="loginTimesMapCache" ref="configMemCache" />
+		<property name="roleService" ref="roleService" />
+		<property name="messageService" ref="messageService" />
+		<property name="menuService" ref="menuService" />
+		<property name="loginEmailUtil">
+			<bean class="com.joyreach.sp.platform.util.EmailUtil">
+				<property name="from" value="${login.mail.default.from}" />
+				<property name="host" value="${login.mail.host}" />
+				<property name="passWord" value="${login.mail.password}" />
+				<property name="port" value="${login.mail.port}" />
+			</bean>
+		</property>
+	</bean>
+
+
+	<bean id="parameterService"
+		class="com.joyreach.sp.platform.service.impl.ParameterServiceImpl">
+		<property name="parameterDAO" ref="parameterDAO" />
+	</bean>
+
+	<bean id="messageService"
+		class="com.joyreach.sp.platform.service.impl.MessageServiceImpl">
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="resourceMap">
+			<map>
+				<entry key="register" value="template/register.vm" />
+				<entry key="password" value="template/password.vm" />
+				<entry key="loginRemind" value="template/loginRemind.vm" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="velocityProperties">
+			<props>
+				<prop key="resource.loader">class</prop>
+				<prop key="class.resource.loader.class">
+					org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+				</prop>
+				<prop key="velocimacro.library"></prop>
+				<prop key="input.encoding">utf-8</prop>
+				<prop key="output.encoding">utf-8</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="roleService" class="com.joyreach.sp.platform.service.impl.RoleServiceImpl">
+		<property name="roleDAO" ref="roleDAO" />
+	</bean>
+
+	<bean id="userActionLogService"
+		class="com.joyreach.sp.platform.service.impl.UserActionLogServiceImpl">
+		<property name="userActionLogBuffer" ref="userActionLogBuffer" />
+		<property name="userActionLogDAO" ref="userActionLogDAO" />
+	</bean>
+
+	<bean id="userActionLogBuffer" class="edu.hziee.common.queue.DelayExecuteBuffer"
+		init-method="start" destroy-method="flush">
+		<property name="name" value="userActionLogBuffer" />
+		<property name="poolSize" value="${user.action.cached.count}" />
+		<property name="batchSize" value="${user.action.batch.size}" />
+		<property name="checkInterval" value="${user.action.check.interval}" />
+		<property name="batchExecutor" ref="userActionLogDAO" />
+	</bean>
+
+	<bean id="ipService" class="edu.hziee.cap.common.service.impl.IpServiceImpl"
+		init-method="getAllIpInfo">
+		<property name="ipDAO" ref="ipDAO" />
+	</bean>
+
+	<bean id="maintenUtil" class="com.joyreach.sp.platform.util.MaintenUtil"
+		factory-method="getInstance">
+		<property name="parameterService" ref="parameterService" />
+	</bean>
+
+	<bean id="spInfoService" class="com.joyreach.sp.platform.service.impl.SpInfoServiceImpl">
+		<property name="spInfoDAO" ref="spInfoDAO" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="channelService"
+		class="com.joyreach.sp.platform.service.impl.ChannelServiceImpl">
+		<property name="channelDAO" ref="channelDAO" />
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+	<bean id="channelBizTypeInfoService"
+		class="com.joyreach.sp.platform.service.impl.ChannelBizTypeInfoServiceImpl">
+		<property name="channelBizTypeInfoDAO" ref="channelBizTypeInfoDAO" />
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="blackListService"
+		class="com.joyreach.sp.platform.service.impl.BlackListServiceImpl">
+		<property name="blackListDAO" ref="blackListDAO" />
+	</bean>
+	<bean id="cpInfoService" class="com.joyreach.sp.platform.service.impl.CpInfoServiceImpl">
+		<property name="cpInfoDAO" ref="cpInfoDAO" />
+		<property name="commonCpInfoService" ref="commonCpInfoService" />
+		<property name="customerRelationService" ref="customerRelationService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="areaService" ref="areaService" />
+	</bean>
+	<bean id="commonCpInfoService" class="com.joyreach.sp.common.service.impl.CpInfoServiceImpl">
+		<property name="cpInfoDAO" ref="commonCpInfoDAO" />
+		<property name="cpInfoMemCached" ref="configMemCache" />
+	</bean>
+	<bean id="channelGroupService"
+		class="com.joyreach.sp.platform.service.impl.ChannelGroupServiceImpl">
+		<property name="channelGroupDAO" ref="channelGroupDAO" />
+		<property name="userService" ref="userService" />
+		<property name="channelDAO" ref="channelDAO" />
+		<property name="memCached" ref="configMemCache" />
+	</bean>
+
+	<bean id="accountMappingService"
+		class="com.joyreach.sp.platform.service.impl.AccountMappingServiceImpl">
+		<property name="accountMappingDAO" ref="accountMappingDAO" />
+		<property name="userService" ref="userService" />
+	</bean>
+
+	<bean id="cpChannelService"
+		class="com.joyreach.sp.platform.service.impl.CpChannelServiceImpl">
+		<property name="cpChannelDAO" ref="cpChannelDAO" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="cpBizTypeSettlePeriodService" ref="cpBizTypeSettlePeriodService" />
+		<property name="userService" ref="userService" />
+	</bean>
+
+	<bean id="cpMrService" class="com.joyreach.sp.platform.service.impl.CpMrServiceImpl">
+		<property name="cpMrDAO" ref="cpMrDAO" />
+	</bean>
+
+	<bean id="cpSettleService"
+		class="com.joyreach.sp.platform.service.impl.CpSettleServiceImpl">
+		<property name="cpSettleDAO" ref="cpSettleDAO" />
+		<property name="bizDatecpSettleDAO" ref="bizDatecpSettleDAO" />
+		<property name="mrSettleEmailUtil">
+			<bean class="com.joyreach.sp.platform.util.EmailUtil">
+				<property name="from" value="${login.mail.default.from}" />
+				<property name="host" value="${login.mail.host}" />
+				<property name="passWord" value="${login.mail.password}" />
+				<property name="port" value="${login.mail.port}" />
+			</bean>
+		</property>
+		<property name="sendTo" value="${mr.settle.send.email}" />
+		<property name="excelWorkDir" value="${mr.settle.excel.work.dir}" />
+		<property name="sendToAiyouxi" value="${aiyouxi.mr.settle.send.email}" />
+		<property name="sendToAiyouxiCC" value="${aiyouxi.mr.settle.send.cc.email}" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="monthOrderService" ref="monthOrderService" />
+		<property name="spMrDAO" ref="spMrDAO" />
+		<property name="cpRateDao" ref="cpRateDao" />
+		<property name="cpMrMonthCodeSettleDAO" ref="cpMrMonthCodeSettleDAO" />
+	</bean>
+
+	<bean id="spMrService" class="com.joyreach.sp.platform.service.impl.SpMrServiceImpl">
+		<property name="spMrDAO" ref="spMrDAO" />
+		<property name="channelService" ref="channelService" />
+		<property name="spInfoDAO" ref="spInfoDAO" />
+		<property name="cpInfoDAO" ref="cpInfoDAO" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+
+	<bean id="channelProvinceLimitService"
+		class="com.joyreach.sp.platform.service.impl.ChannelProvinceLimitServiceImpl">
+		<property name="channelProvinceLimitDAO" ref="channelProvinceLimitDAO" />
+		<property name="channelService" ref="channelService" />
+	</bean>
+
+	<bean id="cpMrSettleTaskService"
+		class="com.joyreach.sp.platform.service.impl.CpMrSettleTaskService">
+		<property name="spAmountRateDAO" ref="spAmountRateDAO"></property>
+		<property name="mrSettleEmailUtil">
+			<bean class="com.joyreach.sp.platform.util.EmailUtil">
+				<property name="from" value="${dailyreport.mail.default.from}" />
+				<property name="host" value="${dailyreport.mail.host}" />
+				<property name="passWord" value="${dailyreport.mail.password}" />
+				<property name="port" value="${dailyreport.mail.port}" />
+			</bean>
+		</property>
+		<property name="parameterService" ref="parameterService" />
+		<property name="cpMrSettleTaskDAO" ref="cpMrSettleTaskDAO"></property>
+		<property name="excelWorkDir" value="${mr.settle.excel.work.dir}" />
+	</bean>
+
+	<bean id="spMrSettleService"
+		class="com.joyreach.sp.platform.service.impl.SpMrSettleServiceImpl">
+		<property name="spMrSettleDAO" ref="spMrSettleDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+
+	<bean id="provinceService"
+		class="com.joyreach.sp.platform.service.impl.ProvinceServiceImpl">
+		<property name="provinceDAO" ref="provinceDAO" />
+	</bean>
+
+	<bean id="userComplaintService"
+		class="com.joyreach.sp.platform.service.impl.UserComplaintServiceImpl">
+		<property name="userComplaintDAO" ref="userComplaintDAO" />
+		<property name="complaintRateDataService" ref="complaintRateDataService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+
+	<bean id="phoneInfoService"
+		class="com.joyreach.sp.platform.service.impl.PhoneInfoServiceImpl">
+		<property name="phoneInfoDAO" ref="phoneInfoDAO" />
+	</bean>
+	<bean id="smsApiResultService"
+		class="com.joyreach.sp.common.service.impl.SmsApiResultServiceImpl">
+		<property name="smsApiResultDAO" ref="smsApiResultDAO" />
+		<property name="smsApiResultMemcache" ref="smsApiResultMemcache" />
+	</bean>
+
+	<bean id="passwordEncryptUtil" class="com.joyreach.sp.platform.util.PasswordEncryptUtil">
+		<property name="encryptKey" value="${password.encrypt.key}" />
+	</bean>
+
+	<bean id="ayxComplaintService"
+		class="com.joyreach.sp.platform.service.impl.AyxComplaintServiceImpl">
+		<property name="ayxComplaintLoggerDAO" ref="ayxComplaintLoggerDAO" />
+		<property name="ayxComplaintDAO" ref="ayxComplaintDAO" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="channelService" ref="channelService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="spInfoService" ref="spInfoService" />
+		<property name="userComplaintService" ref="userComplaintService" />
+		<property name="blackListService" ref="blackListService" />
+		<property name="complaintRateDataService" ref="complaintRateDataService" />
+		<property name="complaintRateDataDAO" ref="complaintRateDataDAO" />
+	</bean>
+	<bean id="complaintRateDataService"
+		class="com.joyreach.sp.platform.service.impl.ComplaintRateDataServiceImpl">
+		<property name="complaintRateDataDAO" ref="complaintRateDataDAO" />
+		<property name="provinceService" ref="provinceService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+	</bean>
+
+	<bean id="areaService" class="com.joyreach.sp.common.service.impl.AreaServiceImpl">
+		<property name="areaDAO" ref="areaDAO" />
+		<property name="areaMemCached" ref="configMemCache" />
+	</bean>
+
+	<bean id="cpMrMonitorService"
+		class="com.joyreach.sp.platform.service.impl.CpMrMonitorServiceImpl">
+		<property name="cpMrMonitorDAO" ref="cpMrMonitorDAO" />
+	</bean>
+	<bean id="cpAppMonitorService"
+		class="com.joyreach.sp.platform.service.impl.CpAppMonitorServiceImpl">
+		<property name="cpAppMonitorDAO" ref="cpAppMonitorDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+	</bean>
+
+	<bean id="smsCpAppService"
+		class="com.joyreach.sp.platform.service.impl.SmsCpAppServiceImpl">
+		<property name="smsCpAppDAO" ref="smsCpAppDAO" />
+	</bean>
+	<bean id="appBlackService"
+		class="com.joyreach.sp.platform.service.impl.AppBlackServiceImpl">
+		<property name="appBlackDAO" ref="appBlackDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+	</bean>
+	<bean id="ehcacheServerService"
+		class="com.joyreach.sp.platform.service.impl.EhcacheServerServiceImpl">
+		<property name="ehcacheServerDAO" ref="ehcacheServerDAO" />
+	</bean>
+	<bean id="spMrAppService"
+		class="com.joyreach.sp.platform.service.impl.SpMrAppServiceImpl">
+		<property name="spMrAppDAO" ref="spMrAppDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+
+	<bean id="phoneInfoBuffer" class="edu.hziee.common.queue.DelayExecuteBuffer"
+		init-method="start" destroy-method="flush">
+		<property name="name" value="phoneInfoBuffer" />
+		<property name="poolSize" value="10000" />
+		<property name="batchSize" value="100" />
+		<property name="checkInterval" value="500" />
+		<property name="batchExecutor" ref="phoneInfoDAO" />
+	</bean>
+
+	<bean id="providerMrService"
+		class="com.joyreach.sp.platform.service.impl.ProviderMrServiceImpl">
+		<property name="providerMrDAO" ref="providerMrDAO" />
+	</bean>
+
+	<bean id="cpAppOpenService"
+		class="com.joyreach.sp.platform.service.impl.CpAppOpenServiceImpl">
+		<property name="cpAppOpenDAO" ref="cpAppOpenDAO" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+	</bean>
+
+	<bean id="customerRelationService"
+		class="com.joyreach.sp.platform.service.impl.CustomerRelationServiceImpl">
+		<property name="customerRelationDAO" ref="customerRelationDAO" />
+	</bean>
+	<bean id="channelConfirmService"
+		class="com.joyreach.sp.platform.service.impl.ChannelConfirmServiceImpl">
+		<property name="channelConfirmDAO" ref="channelConfirmDAO" />
+	</bean>
+	<bean id="sensitiveProvinceService"
+		class="com.joyreach.sp.platform.service.impl.SensitiveProvinceServiceImpl">
+		<property name="sensitiveProvinceDAO" ref="sensitiveProvinceDAO" />
+	</bean>
+	<bean id="imsiLimitMonitorService"
+		class="com.joyreach.sp.platform.service.impl.ImsiLimitMonitorServiceImpl">
+		<property name="mrMonitorRedisCache" ref="mrMonitorRedisTemplate" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+
+	<bean id="cpProvinceUserService"
+		class="com.joyreach.sp.platform.service.impl.CpProvinceUserServiceImpl">
+		<property name="cpProvinceUserDAO" ref="cpProvinceUserDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="areaService" ref="areaService" />
+	</bean>
+	<bean id="cpSettlePayService"
+		class="com.joyreach.sp.platform.service.impl.CpSettlePayServiceImpl">
+		<property name="cpSettlePayDAO" ref="cpSettlePayDAO" />
+		<property name="userComplaintService" ref="userComplaintService" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="cpSettleInvoiceService" ref="cpSettleInvoiceService" />
+		<property name="fileSettlePath" value="${cp.file.settle.path}" />
+		<property name="serverId" value="${biz.server.id}" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+	</bean>
+
+	<bean id="channelMonitorService"
+		class="com.joyreach.sp.platform.service.impl.ChannelMonitorServiceImpl">
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="areaService" ref="areaService" />
+		<property name="channelService" ref="channelService" />
+		<property name="channelMonitorDAO" ref="channelMonitorDAO" />
+	</bean>
+	<bean id="spAmountRateService"
+		class="com.joyreach.sp.platform.service.impl.SpAmountRateServiceImpl">
+		<property name="spAmountRateDAO" ref="spAmountRateDAO" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+	</bean>
+
+	<bean id="cpRealTimeReqExchangeService"
+		class="com.joyreach.sp.platform.service.impl.CpRealTimeReqExchangeServiceImpl">
+		<property name="cpRealTimeReqExchangeDAO" ref="cpRealTimeReqExchangeDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+
+	<bean id="cpRealTimeMrExchangeService"
+		class="com.joyreach.sp.platform.service.impl.CpRealTimeMrExchangeServiceImpl">
+		<property name="cpRealTimeMrExchangeDAO" ref="cpRealTimeMrExchangeDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="channelService" ref="channelService" />
+		<property name="spCpMonitorDAO" ref="spCpMonitorDAO" />
+		<property name="areaService" ref="areaService" />
+	</bean>
+	<bean id="cpChGroupInfoService"
+		class="com.joyreach.sp.platform.service.impl.CpChGroupInfoServiceImpl">
+		<property name="cpChGroupInfoDAO" ref="cpChGroupInfoDAO" />
+		<property name="channelService" ref="channelService" />
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+	</bean>
+	<bean id="shunShiComplaintService"
+		class="com.joyreach.sp.platform.service.impl.ShunShiComplaintServiceImpl">
+		<property name="shunShiComplaintDAO" ref="shunShiComplaintDAO" />
+		<property name="blackListService" ref="blackListService" />
+		<property name="userComplaintService" ref="userComplaintService" />
+		<property name="ayxComplaintLoggerDAO" ref="ayxComplaintLoggerDAO" />
+	</bean>
+	<bean id="zhangYouHDYdmmComplaintService"
+		class="com.joyreach.sp.platform.service.impl.ZhangYouHDYdmmComplaintServiceImpl">
+		<property name="ayxComplaintLoggerDAO" ref="ayxComplaintLoggerDAO" />
+		<property name="ayxComplaintDAO" ref="ayxComplaintDAO" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="channelService" ref="channelService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="spInfoService" ref="spInfoService" />
+		<property name="userComplaintService" ref="userComplaintService" />
+		<property name="blackListService" ref="blackListService" />
+	</bean>
+	<bean id="getYdmfMonitorService"
+		class="com.joyreach.sp.platform.service.impl.GetYdmfMonitorServiceImpl">
+		<property name="provinceService" ref="provinceService" />
+		<property name="ydmfAreaStrategyDAO" ref="ydmfAreaStrategyDAO" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="yddmSmsNotifyDAO" ref="yddmSmsNotifyDAO" />
+	</bean>
+	<bean id="cpChGroupLimitService"
+		class="com.joyreach.sp.platform.service.impl.CpChGroupLimitServiceImpl">
+		<property name="cpChGroupLimitDAO" ref="cpChGroupLimitDAO" />
+	</bean>
+
+	<bean id="cpChGroupStrategyService"
+		class="com.joyreach.sp.platform.service.impl.CpChGroupStrategyServiceImpl">
+		<property name="cpChGroupStrategyDAO" ref="cpChGroupStrategyDAO"></property>
+	</bean>
+	<bean id="wanRatioService"
+		class="com.joyreach.sp.platform.service.impl.WanRatioServiceImpl">
+		<property name="wanRatioDAO" ref="wanRatioDAO" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="areaService" ref="areaService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="parameterService" ref="parameterService" />
+	</bean>
+
+	<bean id="cacheManager" class="com.joyreach.sp.platform.util.CacheManager">
+		<property name="cacheMemMap">
+			<map>
+				<entry key="configMemCache" value-ref="configMemCache" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="suGeMrService" class="com.joyreach.sp.platform.service.impl.SuGeMrServiceImpl">
+		<property name="suGeMrDAO" ref="suGeMrDAO" />
+	</bean>
+
+	<bean id="smsRequestErrorService"
+		class="com.joyreach.sp.platform.service.impl.SmsRequestErrorServiceImpl">
+		<property name="smsRequestErrorDAO" ref="smsRequestErrorDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelService" ref="channelService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+	<bean id="spCpMonitorService"
+		class="com.joyreach.sp.platform.service.impl.SpCpMonitorServiceImpl">
+		<property name="spCpMonitorCollectDAO" ref="spCpMonitorCollectDAO" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="mrCheckEmail">
+			<bean class="com.joyreach.sp.platform.util.EmailUtil">
+				<property name="from" value="${login.mail.default.from}" />
+				<property name="host" value="${login.mail.host}" />
+				<property name="passWord" value="${login.mail.password}" />
+				<property name="port" value="${login.mail.port}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="sameTypeChGroupLimitService"
+		class="com.joyreach.sp.platform.service.impl.SameTypeChGroupLimitServiceImpl">
+		<property name="sameTypeChGroupLimitDAO" ref="sameTypeChGroupLimitDAO" />
+	</bean>
+	<bean id="cpSettleInvoiceService"
+		class="com.joyreach.sp.platform.service.impl.CpSettleInvoiceServiceImpl">
+		<property name="cpSettleInvoiceDAO" ref="cpSettleInvoiceDAO" />
+	</bean>
+	<bean id="smsSpConfirmService"
+		class="com.joyreach.sp.platform.service.impl.SmsSpConfirmServiceImpl">
+		<property name="smsSpConfirmDAO" ref="smsSpConfirmDAO" />
+		<property name="apiResultService" ref="smsApiResultService" />
+	</bean>
+	
+
+
+	<bean id="abStractComplaintServiceMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="1" value-ref="zhangYouHdYdmmComplaintService" /><!--掌游互动 -->
+				<entry key="2" value-ref="xiangTongAdmComplaintService" /><!--翔通爱动漫 -->
+				<entry key="3" value-ref="mingRiKJYddmComplaintService" /><!--明日空间移动MM -->
+				<entry key="4" value-ref="xiangTongAcsComplaintService" /><!--翔通爱城市 -->
+				<entry key="5" value-ref="dongShuoLianTongWoComplaintService" /><!--东硕联通wo+ -->
+				<entry key="6" value-ref="jiBeiYiDongRdoComplaintService" /><!--集贝移动RDO -->
+				<entry key="7" value-ref="tianYiKongJianJiDiComplaintService" /><!--天翼空间基地 -->
+				<entry key="8" value-ref="mingRiKJYddmMonthComplaintService" /><!--明日空间移动MM包月 -->
+				<entry key="9" value-ref="beiJingSjYdpcComplaintService" /><!--北京四季移动Pc -->
+				<entry key="10" value-ref="zheJiangWoxxComplaintService" /><!--浙江我想想RDO -->
+				<entry key="11" value-ref="mingRiKJDdoComplaintService" /><!--明日空间DDO -->
+				<entry key="12" value-ref="zhongTianYiDongRdoComplaintService" />
+				<entry key="13" value-ref="fangCunTianXiaAyxComplaintService" />
+				<entry key="14" value-ref="hzShengMaiRdoComplaintServiceImpl" />
+				<entry key="15" value-ref="tyydDdoComplaintService" />
+				<entry key="16" value-ref="lianChuangAyxComplaintService" />
+				<entry key="17" value-ref="guangZhouDmDdoComplaintService" />
+				<entry key="18" value-ref="qianLuHuiRdoComplaintService" />
+				<entry key="19" value-ref="zheJiangWoxxYddmMonthComplaintService" />
+				<entry key="20" value-ref="hzYueLanRdoComplaintService" />
+				<entry key="21" value-ref="nanJingQiLinAyxComplaintService" />
+				<entry key="22" value-ref="acyJiDiComplaintService" />
+				<entry key="23" value-ref="beiJingZfRdoComplaintService" />
+				<entry key="24" value-ref="guangZhouDaoXiangYddmComplaintService" />
+				<entry key="25" value-ref="heChuangShiXunVideoComplaintService" />
+				<entry key="26" value-ref="shMiFuYddmMonthComplaintService" />
+				<entry key="27" value-ref="zhongWenZaiXianRdoComplaintService" /><!--中文在线 -->
+				<entry key="28" value-ref="zhangMengRdoComplaintService" />
+				<entry key="29" value-ref="nanJingYbgComplaintService" />
+				<entry key="30" value-ref="ayxMonthlyComplaintService" />
+				<entry key="31" value-ref="yiDongYDComplaintService" /><!--中文在线移动阅读 -->
+				<entry key="32" value-ref="qlhYiDongYdComplaintService" /><!--千禄汇 -->
+				<entry key="33" value-ref="lianZhongMMComplaintService" /><!--联众移动MM -->
+				<entry key="34" value-ref="tongYuRDOComplaintService" /><!--同娱rdo -->
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="abStractComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.AbStractComplaintService"
+		abstract="true">
+		<property name="ayxComplaintLoggerDAO" ref="ayxComplaintLoggerDAO" />
+		<property name="ayxComplaintDAO" ref="ayxComplaintDAO" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="channelService" ref="channelService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="spInfoService" ref="spInfoService" />
+		<property name="userComplaintService" ref="userComplaintService" />
+		<property name="blackListService" ref="blackListService" />
+		<property name="parameterService" ref="parameterService" />
+	</bean>
+
+	<bean id="zhangYouHdYdmmComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.ZhangYouHdYdmmComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+
+	<bean id="mingRiKJYddmComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.MingRiKJYddmComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+
+	<bean id="xiangTongAdmComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.XiangTongAdmComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="xiangTongAcsComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.XiangTongAcsComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="dongShuoLianTongWoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.DongShuoLianTongWoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="jiBeiYiDongRdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.JiBeiYiDongRdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="tianYiKongJianJiDiComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.TianYiKongJianJiDiComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="mingRiKJYddmMonthComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.MingRiKJYddmMonthComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="beiJingSjYdpcComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.BeiJingSjYdpcComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="zheJiangWoxxComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.ZheJiangWoxxComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="mingRiKJDdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.MingRiKJDdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="zhongTianYiDongRdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.ZhongTianYiDongRdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="hzShengMaiRdoComplaintServiceImpl"
+		class="com.joyreach.sp.platform.service.complaint.HzShengMaiRdoComplaintServiceImpl"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="fangCunTianXiaAyxComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.FangCunTianXiaAyxComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="tyydDdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.TyydDdoComplaintServiceImpl"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="lianChuangAyxComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.LianChuangAyxComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="guangZhouDmDdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.GuangZhouDmDdoComplaintServiceImpl"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="qianLuHuiRdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.QianLuHuiRdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="zheJiangWoxxYddmMonthComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.ZheJiangWoxxYddmMonthComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="hzYueLanRdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.HzYueLanRdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="nanJingQiLinAyxComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.NanJingQiLinAyxComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="acyJiDiComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.AcyJiDiComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+
+	<bean id="chChGroupWeightService"
+		class="com.joyreach.sp.platform.service.impl.CpChChGroupWeightServiceImpl">
+		<property name="cpChChGroupWeightDAO" ref="cpChChGroupWeightDAO" />
+		<property name="channelService" ref="channelService" />
+	</bean>
+
+	<bean id="cpMrMonthCodeSettleService"
+		class="com.joyreach.sp.platform.service.impl.CpMrMonthCodeSettleServiceImpl">
+		<property name="cpSettleDAO" ref="cpSettleDAO" />
+		<property name="cpMrMonthCodeSettleDAO" ref="cpMrMonthCodeSettleDAO" />
+		<property name="bizDatecpSettleDAO" ref="bizDatecpSettleDAO" />
+		<property name="cpRateDao" ref="cpRateDao" />
+		<property name="bizDateCpMrMonthCodeSettleDAO" ref="bizDateCpMrMonthCodeSettleDAO" />
+		<property name="mrSettleEmailUtil">
+			<bean class="com.joyreach.sp.platform.util.EmailUtil">
+				<property name="from" value="${login.mail.default.from}" />
+				<property name="host" value="${login.mail.host}" />
+				<property name="passWord" value="${login.mail.password}" />
+				<property name="port" value="${login.mail.port}" />
+			</bean>
+		</property>
+		<property name="sendTo" value="${mr.settle.send.email}" />
+		<property name="excelWorkDir" value="${mr.settle.excel.work.dir}" />
+		<property name="sendToAiyouxi" value="${aiyouxi.mr.settle.send.email}" />
+		<property name="sendToAiyouxiCC" value="${aiyouxi.mr.settle.send.cc.email}" />
+		<property name="parameterService" ref="parameterService" />
+	</bean>
+
+	<bean id="cpChannelGroupService"
+		class="com.joyreach.sp.common.service.impl.CpChannelGroupServiceImpl">
+		<property name="cpChannelGroupDAO" ref="cpChannelGroupDAO" />
+		<property name="memCached" ref="configMemCache" />
+	</bean>
+	<bean id="spComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.SpComplaintServiceImpl">
+		<property name="abStractComplaintServiceMap" ref="abStractComplaintServiceMap" />
+	</bean>
+	<bean id="beiJingZfRdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.BeiJingZfRdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="guangZhouDaoXiangYddmComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.GuangZhouDaoXiangYddmComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="heChuangShiXunVideoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.HeChuangShiXunVideoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="shMiFuYddmMonthComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.ShMiFuYddmMonthComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="zhongWenZaiXianRdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.ZhongWenZaiXianRdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="zhangMengRdoComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.ZhangMengRdoComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="nanJingYbgComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.NanJingYbgComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="ayxMonthlyComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.AyxMonthlyComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+
+	<bean id="monthOrderService"
+		class="com.joyreach.sp.common.service.impl.MonthOrderServiceImpl">
+		<property name="monthOrderDAO" ref="monthOrderDAO" />
+	</bean>
+	<bean id="cpBizTypeSettlePeriodService"
+		class="com.joyreach.sp.platform.service.impl.CpBizTypeSettlePeriodServiceImpl">
+		<property name="cpBizTypeSettlePeriodDAO" ref="cpBizTypeSettlePeriodDAO" />
+		<property name="channelService" ref="channelService" />
+		<property name="bizTypeInfoService" ref="channelBizTypeInfoService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+	</bean>
+
+	<bean id="monthSpMrSettleService"
+		class="com.joyreach.sp.platform.service.impl.MonthSpMrSettleServiceImpl">
+		<property name="monthSpMrSettleDAO" ref="monthSpMrSettleDAO" />
+		<property name="spInfoService" ref="spInfoService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+	</bean>
+
+	<bean id="monthCpMrSettleService"
+		class="com.joyreach.sp.platform.service.impl.MonthCpMrSettleServiceImpl">
+		<property name="monthCpMrSettleDAO" ref="monthCpMrSettleDAO" />
+		<property name="spInfoService" ref="spInfoService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelService" ref="channelService" />
+		<property name="provinceService" ref="provinceService" />
+	</bean>
+	<bean id="remainUserRateService"
+		class="com.joyreach.sp.platform.service.impl.RemainUserRateServiceImpl">
+		<property name="remainUserRateDAO" ref="remainUserRateDAO" />
+	</bean>
+
+	<bean id="monthRealTimeExchangeService"
+		class="com.joyreach.sp.platform.service.impl.MonthRealTimeExchangeServiceImpl">
+		<property name="monthRealTimeExchangeDAO" ref="monthRealTimeExchangeDAO" />
+	</bean>
+
+	<bean id="checkPassLimitService"
+		class="com.joyreach.sp.platform.service.impl.CheckPassLimitServiceImpl">
+		<property name="checkPassLimitDAO" ref="checkPassLimitDAO" />
+		<property name="redisLimitCacheMonth" ref="redisLimitCacheMonth" />
+		<property name="redisLimitCacheDay" ref="redisLimitCacheDay" />
+		<property name="provinceService" ref="provinceService" />
+		<property name="channelService" ref="channelService" />
+		<property name="parameterService" ref="parameterService" />
+		<property name="sensitiveProvinceDAO" ref="sensitiveProvinceDAO" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="memCached" ref="configMemCache" />
+		<property name="emailUtilMap" ref="emailUtilMap" />
+	</bean>
+	<bean id="dtEmailUtil" class="com.joyreach.sp.platform.util.EmailUtil">
+		<property name="from" value="${check.data.notify.mail.from}" />
+		<property name="host" value="${check.data.notify.mail.host}" />
+		<property name="passWord" value="${check.data.notify.mail.password}" />
+		<property name="port" value="${check.data.notify.mail.port}" />
+	</bean>
+	<bean id="testEmailUtil" class="com.joyreach.sp.platform.util.EmailUtil">
+		<property name="from" value="${test.mail.default.from}" />
+		<property name="host" value="${test.mail.host}" />
+		<property name="passWord" value="${test.mail.password}" />
+		<property name="port" value="${test.mail.port}" />
+	</bean>
+
+	<bean id="emailUtilMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="0" value-ref="testEmailUtil" />
+				<entry key="1" value-ref="dtEmailUtil" />
+			</map>
+		</constructor-arg>
+	</bean>
+	<bean id="mrCheckMonitorService"
+		class="com.joyreach.sp.platform.service.impl.MrCheckMonitorServiceImpl">
+		<property name="parameterService" ref="parameterService" />
+		<property name="smsApiResultService" ref="smsApiResultService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="memCached" ref="configMemCache" />
+		<property name="mrCheckEmail">
+			<bean class="com.joyreach.sp.platform.util.EmailUtil">
+				<property name="from" value="${check.data.notify.mail.from}" />
+				<property name="host" value="${check.data.notify.mail.host}" />
+				<property name="passWord" value="${check.data.notify.mail.password}" />
+				<property name="port" value="${check.data.notify.mail.port}" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="redisLimitCacheMonth" class="com.joyreach.sp.common.redis.RedisCacheImpl">
+		<property name="redisTemplate" ref="smsInrRedisTemplate" />
+	</bean>
+	<bean id="redisLimitCacheDay" class="com.joyreach.sp.common.redis.RedisCacheImpl">
+		<property name="redisTemplate" ref="smsInrRedisTemplate" />
+	</bean>
+
+	<bean id="nextDaySettleService"
+		class="com.joyreach.sp.platform.service.impl.NextDaySettleServiceImpl">
+		<property name="nextDaySettleDAO" ref="nextDaySettleDAO" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelService" ref="channelService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="cpChannelService" ref="cpChannelService" />
+		<property name="provinceService" ref="provinceService" />
+		<property name="smsApiResultService" ref="smsApiResultService" />
+		<property name="cpRateService" ref="cpRateService" />
+		<property name="channelBizTypeInfoDAO" ref="channelBizTypeInfoDAO" />
+	</bean>
+	<bean id="monthRealTimeTransformService"
+		class="com.joyreach.sp.platform.service.impl.MonthRealTimeTransformServiceImpl">
+		<property name="monthRealTimeTransformDAO" ref="monthRealTimeTransformDAO" />
+	</bean>
+	<bean id="smsMrResultMonthCheckService"
+		class="com.joyreach.sp.platform.service.impl.SmsMrResultMonthCheckServiceImpl">
+		<property name="smsMrResultMonthCheckDAO" ref="smsMrResultMonthCheckDAO" />
+	</bean>
+	<bean id="whiteListService"
+		class="com.joyreach.sp.platform.service.impl.WhiteListServiceImpl">
+		<property name="whiteListDAO" ref="whiteListDAO" />
+	</bean>
+	<bean id="cpMatchingMonitorService"
+		class="com.joyreach.sp.platform.service.impl.CpMatchingMonitorServiceImpl">
+		<property name="cpMatchingMonitorDAO" ref="cpMatchingMonitorDAO" />
+	</bean>
+
+	<bean id="orderInquiryService"
+		class="com.joyreach.sp.platform.service.impl.OrderInquiryServiceImpl">
+		<property name="channelBizTypeInfoService" ref="channelBizTypeInfoService" />
+		<property name="channelGroupService" ref="channelGroupService" />
+		<property name="apiResultService" ref="smsApiResultService" />
+		<property name="smsApiResultDAO" ref="smsApiResultDAO" />
+		<property name="smsSpConfirmDAO" ref="smsSpConfirmDAO" />
+		<property name="channelService" ref="channelService" />
+		<property name="cpInfoDAO" ref="cpInfoDAO" />
+		<property name="spInfoDAO" ref="spInfoDAO" />
+		<property name="spMrDAO" ref="spMrDAO" />
+	</bean>
+
+	<bean id="yiDongYDComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.YiDongYDComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="qlhYiDongYdComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.QlhYiDongYdComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+	<bean id="lianZhongMMComplaintService"
+		class="com.joyreach.sp.platform.service.complaint.LianZhongMMComplaintService"
+		parent="abStractComplaintService">
+	</bean>
+
+	<bean id="cpRateService" class="com.joyreach.sp.platform.service.impl.CpRateServiceImpl">
+		<property name="cpRateDao" ref="cpRateDao" />
+		<property name="cpInfoService" ref="cpInfoService" />
+		<property name="channelBizTypeInfoDAO" ref="channelBizTypeInfoDAO" />
+	</bean>
+	
+	<bean id="monthOrderPreserveService" class="com.joyreach.sp.platform.service.impl.MonthOrderPreserveServiceImpl">
+		<property name="monthOrderPreserveDao" ref="monthOrderPreserveDao" />
+	</bean>
+	
+	<bean id="tongYuRDOComplaintService" parent="abStractComplaintService" 
+		 class="com.joyreach.sp.platform.service.complaint.TongYuRDOComplaintService">
+		 <property name="tongYuRDOComplaintDAO" ref="tongYuRDOComplaintDAO"></property>
+	</bean>
+	
+	<bean id="dialingTestProService"
+		class="com.joyreach.sp.platform.service.impl.DialingTestProServiceImpl">
+		<property name="dialingTestInfoDAO" ref="dialingTestInfoDAO" />
+		<property name="provinceDAO" ref="provinceDAO" />
+	</bean>
+</beans>
