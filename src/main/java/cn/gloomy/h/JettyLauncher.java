@@ -3,6 +3,7 @@ package cn.gloomy.h;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
@@ -43,9 +44,9 @@ public class JettyLauncher {
     pro.load(in);
     in.close();
 
-     if (pro.getProperty("biz.bind.host") != null) {
-     bindHost = pro.getProperty("biz.bind.host");
-     }
+    if (pro.getProperty("biz.bind.host") != null) {
+      bindHost = pro.getProperty("biz.bind.host");
+    }
     if (pro.getProperty("biz.bind.port") != null) {
       bindPort = Integer.parseInt(pro.getProperty("biz.bind.port"));
     }
@@ -122,11 +123,14 @@ public class JettyLauncher {
   }
 
   public static void main(String[] args) {
-
+    String port = null;
     String contextPath = null;
     for (String arg : args) {
       if (arg.startsWith("-contextPath")) {
         contextPath = arg.substring(arg.indexOf("=") + 1);
+      }
+      if (arg.startsWith("-httpPort")) {
+        port = arg.substring(arg.indexOf("=") + 1);
       }
     }
 
@@ -135,6 +139,9 @@ public class JettyLauncher {
       embbedJetty.setContextPath(contextPath);
     }
 
+    if (StringUtils.isNotBlank(port)) {
+      embbedJetty.setBindPort(Integer.valueOf(port));
+    }
     try {
 
       embbedJetty.start();
